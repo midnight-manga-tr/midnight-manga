@@ -7,7 +7,7 @@
     <style>
         body { background: #0a0a0c; color: white; margin: 0; display: flex; flex-direction: column; align-items: center; font-family: sans-serif; }
         .reader-container { max-width: 800px; width: 100%; display: flex; flex-direction: column; }
-        .reader-container img { width: 100%; height: auto; display: block; margin: 0; padding: 0; }
+        .reader-container img { width: 100%; height: auto; display: block; margin: 0; padding: 0; min-height: 100px; }
         .nav-bar { background: #161b22; width: 100%; padding: 15px; display: flex; justify-content: space-between; position: sticky; top: 0; z-index: 10; border-bottom: 1px solid #9d4edd; }
         .btn { background: #9d4edd; color: white; text-decoration: none; padding: 8px 15px; border-radius: 5px; font-weight: bold; font-size: 14px; }
     </style>
@@ -18,7 +18,6 @@
         <span id="mangaTitle">Yükleniyor...</span>
         <div style="width: 80px;"></div>
     </div>
-
     <div class="reader-container" id="pageContainer"></div>
 
     <script>
@@ -32,16 +31,16 @@
         for (let i = 1; i <= total; i++) {
             const img = document.createElement('img');
             
-            // Sayı formatını 001, 002 yapma fonksiyonu
-            let pageNum = i.toString().padStart(3, '0'); 
-            
-            // Senin yüklediğin "at-the-end-of-the-road" klasöründeki resimleri dene
-            img.src = `${folder}/${pageNum}.jpg`; 
-            
-            // Eğer .jpg olarak bulamazsa .png veya büyük harf .JPG denemesi için hata kontrolü
+            // Senin dosyaların hem '1' hem '001' formatında olabilir ve uzantısı yok.
+            // Bu kod önce uzantısız '001'i deneyecek.
+            let fileName = i.toString().padStart(3, '0'); 
+            img.src = `${folder}/${fileName}`; 
+
+            // Eğer 001 çalışmazsa düz '1' olarak deneyecek
             img.onerror = function() {
-                if(this.src.includes('.jpg')) this.src = this.src.replace('.jpg', '.png');
-                else if(this.src.includes('.png')) this.src = this.src.replace('.png', '.JPG');
+                if (!this.src.includes('retry')) {
+                    this.src = `${folder}/${i}?retry=true`;
+                }
             };
 
             img.loading = "lazy";
