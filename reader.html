@@ -5,30 +5,64 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Midnight Reader</title>
     <style>
-        body { background: #0a0a0c; margin: 0; display: flex; flex-direction: column; align-items: center; }
-        .reader-container { max-width: 800px; width: 100%; }
-        .reader-container img { width: 100%; display: block; }
-        .nav-bar { background: #161b22; width: 100%; padding: 15px; text-align: center; position: sticky; top: 0; border-bottom: 1px solid #9d4edd; }
-        .btn { color: #9d4edd; text-decoration: none; font-weight: bold; }
+        body { background: #000; margin: 0; display: flex; flex-direction: column; align-items: center; }
+        img { width: 100%; max-width: 800px; display: block; }
+        .nav { padding: 20px; }
+        .btn { background: #9d4edd; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; font-family: sans-serif; }
     </style>
 </head>
 <body>
-    <div class="nav-bar"><a href="index.html" class="btn">← ANA SAYFA</a></div>
-    <div class="reader-container" id="pageContainer"></div>
+    <div class="nav">
+        <a href="chapters.html" class="btn">Bölümlere Dön</a>
+    </div>
+
+    <div id="imageContainer"></div>
 
     <script>
         const params = new URLSearchParams(window.location.search);
-        const folder = params.get('f');
-        const total = parseInt(params.get('n'));
-        const container = document.getElementById('pageContainer');
+        const folder = params.get('f'); // Örn: at-the-end-of-the-road/b1
+        const count = parseInt(params.get('n'));
 
-        for (let i = 2; i <= total + 1; i++) {
-            const img = document.createElement('img');
-            // Senin dosyaların "1 (2).jpg" şeklinde gittiği için ismi böyle ayarladık
-            // URL içindeki boşlukları %20 olarak kodlamamız gerekir
-            img.src = `${folder}/1%20(${i}).jpg`; 
-            img.loading = "lazy";
-            container.appendChild(img);
+        if (folder && count) {
+            loadImages(folder, count);
+        }
+
+        function loadImages(folder, count) {
+            const container = document.getElementById('imageContainer');
+            
+            // Klasör yolunun son parçasını al (b1, b2 vb.) ve içindeki rakamı bul
+            const pathParts = folder.split('/');
+            const lastFolder = pathParts[pathParts.length - 1]; 
+            const folderNum = lastFolder.replace('b', ''); // 'b1' -> '1', 'b2' -> '2'
+
+            for (let i = 1; i <= count; i++) {
+                const img = document.createElement('img');
+                
+                // Senin yükleme tarzına göre 2 farklı ihtimali de deniyoruz:
+                // 1. İhtimal: 1 (2).jpg veya 2 (1).jpg formatı
+                // 2. İhtimal: Direkt 1.jpg, 2.jpg formatı
+                
+                let fileName = "";
+                if (i === 1) {
+                    fileName = `${folderNum}.jpg`; // Örn: 1.jpg veya 2.jpg
+                } else {
+                    fileName = `${folderNum}%20(${i}).jpg`; // Örn: 1 (2).jpg veya 2 (2).jpg
+                }
+
+                img.src = `https://midnight-manga-tr.github.io/midnight-manga/${folder}/${fileName}`;
+
+                // Eğer yukarıdaki isimle bulamazsa, düz rakam denesin (i.jpg)
+                img.onerror = function() {
+                    if (!this.getAttribute('data-tried-second')) {
+                        this.setAttribute('data-tried-second', 'true');
+                        this.src = `https://midnight-manga-tr.github.io/midnight-manga/${folder}/${i}.jpg`;
+                    } else {
+                        this.style.display = 'none'; // Hiçbirini bulamazsa gizle
+                    }
+                };
+
+                container.appendChild(img);
+            }
         }
     </script>
 </body>
