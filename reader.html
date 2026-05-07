@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Midnight Reader</title>
+    <style>
+        body { background: #0a0a0c; color: white; margin: 0; display: flex; flex-direction: column; align-items: center; font-family: sans-serif; }
+        .reader-container { max-width: 800px; width: 100%; display: flex; flex-direction: column; }
+        .reader-container img { width: 100%; height: auto; display: block; margin: 0; padding: 0; }
+        .nav-bar { background: #161b22; width: 100%; padding: 15px; display: flex; justify-content: space-between; position: sticky; top: 0; z-index: 10; border-bottom: 1px solid #9d4edd; }
+        .btn { background: #9d4edd; color: white; text-decoration: none; padding: 8px 15px; border-radius: 5px; font-weight: bold; font-size: 14px; }
+    </style>
+</head>
+<body>
+    <div class="nav-bar">
+        <a href="index.html" class="btn">← Ana Sayfa</a>
+        <span id="mangaTitle">Yükleniyor...</span>
+        <div style="width: 80px;"></div>
+    </div>
+
+    <div class="reader-container" id="pageContainer">
+        </div>
+
+    <script>
+        const params = new URLSearchParams(window.location.search);
+        const folder = params.get('f'); // Manga klasör adı
+        const total = params.get('n');  // Toplam sayfa sayısı
+
+        document.getElementById('mangaTitle').innerText = folder.toUpperCase();
+        const container = document.getElementById('pageContainer');
+
+        for (let i = 1; i <= total; i++) {
+            const img = document.createElement('img');
+            // Resimlerin yolu: klasör_adı/sayfa_no.jpg
+            img.src = `${folder}/${i}.jpg`; 
+            img.loading = "lazy"; // Sayfa hızlanması için sadece ekrana geleni yükler
+            container.appendChild(img);
+        }
+    </script>
+</body>
+</html>
