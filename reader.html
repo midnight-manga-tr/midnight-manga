@@ -19,22 +19,32 @@
         <div style="width: 80px;"></div>
     </div>
 
-    <div class="reader-container" id="pageContainer">
-        </div>
+    <div class="reader-container" id="pageContainer"></div>
 
     <script>
         const params = new URLSearchParams(window.location.search);
-        const folder = params.get('f'); // Manga klasör adı
-        const total = params.get('n');  // Toplam sayfa sayısı
+        const folder = params.get('f');
+        const total = parseInt(params.get('n'));
 
-        document.getElementById('mangaTitle').innerText = folder.toUpperCase();
+        document.getElementById('mangaTitle').innerText = folder.replace(/-/g, ' ').toUpperCase();
         const container = document.getElementById('pageContainer');
 
         for (let i = 1; i <= total; i++) {
             const img = document.createElement('img');
-            // Resimlerin yolu: klasör_adı/sayfa_no.jpg
-            img.src = `${folder}/${i}.jpg`; 
-            img.loading = "lazy"; // Sayfa hızlanması için sadece ekrana geleni yükler
+            
+            // Sayı formatını 001, 002 yapma fonksiyonu
+            let pageNum = i.toString().padStart(3, '0'); 
+            
+            // Senin yüklediğin "at-the-end-of-the-road" klasöründeki resimleri dene
+            img.src = `${folder}/${pageNum}.jpg`; 
+            
+            // Eğer .jpg olarak bulamazsa .png veya büyük harf .JPG denemesi için hata kontrolü
+            img.onerror = function() {
+                if(this.src.includes('.jpg')) this.src = this.src.replace('.jpg', '.png');
+                else if(this.src.includes('.png')) this.src = this.src.replace('.png', '.JPG');
+            };
+
+            img.loading = "lazy";
             container.appendChild(img);
         }
     </script>
