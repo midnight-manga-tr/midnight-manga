@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bölümler | Midnight-Manga</title>
+    <style>
+        body { background: #0a0a0c; color: white; font-family: sans-serif; margin: 0; padding: 5%; }
+        .header { border-bottom: 2px solid #9d4edd; padding-bottom: 20px; margin-bottom: 30px; }
+        .chapter-list { display: flex; flex-direction: column; gap: 10px; }
+        .chapter-item { 
+            background: #161b22; 
+            padding: 15px; 
+            border-radius: 8px; 
+            text-decoration: none; 
+            color: white; 
+            border: 1px solid #30363d;
+            transition: 0.3s;
+        }
+        .chapter-item:hover { border-color: #9d4edd; background: #1c2128; }
+        .btn-back { color: #9d4edd; text-decoration: none; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <a href="index.html" class="btn-back">← Ana Sayfaya Dön</a>
+        <h1 id="mangaName">Manga Bölümleri</h1>
+    </div>
+
+    <div class="chapter-list" id="list">
+        <a href="reader.html?f=at-the-end-of-the-road/b1&n=5" class="chapter-item">Bölüm 1</a>
+        <a href="reader.html?f=at-the-end-of-the-road/b2&n=10" class="chapter-item">Bölüm 2</a>
+    </div>
+
+    <script>
+        const params = new URLSearchParams(window.location.search);
+        const name = params.get('name');
+        if(name) document.getElementById('mangaName').innerText = name.toUpperCase();
+    </script>
+</body>
+</html>
