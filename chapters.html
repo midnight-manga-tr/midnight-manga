@@ -3,36 +3,79 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bölümler | Midnight-Manga</title>
+    <title>At the End of the Road - Midnight-Manga</title>
     <style>
-        body { background: #0a0a0c; color: white; font-family: sans-serif; margin: 0; padding: 5%; text-align: center; }
-        .header { border-bottom: 2px solid #9d4edd; padding-bottom: 20px; margin-bottom: 30px; }
-        .chapter-list { display: flex; flex-direction: column; gap: 15px; max-width: 400px; margin: 0 auto; }
-        .chapter-item { 
-            background: #161b22; 
-            padding: 20px; 
-            border-radius: 12px; 
-            text-decoration: none; 
-            color: white; 
-            border: 1px solid #9d4edd;
-            font-weight: bold;
-            font-size: 1.2rem;
-            transition: 0.3s;
-        }
-        .chapter-item:hover { background: #9d4edd; color: white; }
+        :root { --main-color: #9d4edd; --bg-color: #0a0a0c; --card-bg: #161b22; }
+        body { background-color: var(--bg-color); color: white; font-family: sans-serif; margin: 0; padding: 0; line-height: 1.6; }
+        
+        /* Üst Kapak Görseli Bölümü */
+        .series-header { width: 100%; height: 400px; position: relative; overflow: hidden; border-bottom: 3px solid var(--main-color); }
+        .header-bg { width: 100%; height: 100%; object-fit: cover; filter: blur(8px) brightness(0.4); }
+        .header-content { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; width: 90%; }
+        .series-poster { width: 180px; height: 260px; border-radius: 10px; border: 3px solid var(--main-color); box-shadow: 0 0 20px rgba(0,0,0,0.5); }
+        
+        /* Bilgi Alanı */
+        .container { max-width: 800px; margin: -50px auto 40px; padding: 20px; position: relative; background: var(--bg-color); border-radius: 20px; }
+        h1 { font-size: 2.5rem; color: var(--main-color); margin: 10px 0; text-align: center; }
+        
+        .description { background: var(--card-bg); padding: 20px; border-radius: 15px; margin: 20px 0; border-left: 5px solid var(--main-color); font-style: italic; color: #ccc; }
+        
+        /* Bölüm Listesi */
+        .chapter-list { display: flex; flex-direction: column; gap: 12px; margin-top: 30px; }
+        .chapter-item { background: var(--card-bg); padding: 15px 25px; border-radius: 10px; text-decoration: none; color: white; font-weight: bold; display: flex; justify-content: space-between; align-items: center; border: 1px solid #30363d; transition: 0.3s; }
+        .chapter-item:hover { background: var(--main-color); transform: translateX(10px); }
+
+        /* SEO Etiketleri Bölümü */
+        .seo-tags { margin-top: 50px; padding: 20px; border-top: 1px solid #333; text-align: center; }
+        .tag { display: inline-block; background: #222; color: #777; padding: 5px 12px; border-radius: 5px; font-size: 0.8rem; margin: 5px; }
+        
+        .back-btn { display: inline-block; margin-bottom: 20px; color: var(--main-color); text-decoration: none; font-weight: bold; }
     </style>
 </head>
 <body>
-    <div class="header">
-        <h1>AT THE END OF THE ROAD</h1>
+
+    <div class="series-header">
+        <!-- Arka planda bulanık duran kapak -->
+        <img src="at-the-end-of-the-road/b1/1%20(2).jpg" class="header-bg">
+        <div class="header-content">
+            <!-- Önde net duran poster -->
+            <img src="at-the-end-of-the-road/b1/1%20(2).jpg" class="series-poster">
+        </div>
     </div>
 
-    <div class="chapter-list">
-        <a href="reader.html?f=at-the-end-of-the-road/b1&n=6" class="chapter-item">1. Bölüm</a>
-        <a href="reader.html?f=at-the-end-of-the-road/b2&n=5" class="chapter-item">2. Bölüm</a>
+    <div class="container">
+        <a href="index.html" class="back-btn">← Ana Sayfaya Dön</a>
+        <h1>At the End of the Road</h1>
+        
+        <!-- Hikaye Prologu / Özet -->
+        <div class="description">
+            Bir kaza sonrası başka birinin bedeninde uyanan bir gencin hikayesi... Geçmişin gölgeleri ve yeni hayatın zorlukları arasında kalan karakterimiz, yolun sonunda neyle karşılaşacak? Gizem ve dramın iç içe geçtiği bu serüvene hazır olun.
+        </div>
+
+        <h3>Bölümler</h3>
+        <div class="chapter-list">
+            <!-- Bölüm linklerini buraya ekliyoruz -->
+            <a href="reader.html?f=at-the-end-of-the-road/b1&n=6" class="chapter-item">
+                <span>Bölüm 1</span>
+                <span>OKU →</span>
+            </a>
+            <a href="reader.html?f=at-the-end-of-the-road/b2&n=5" class="chapter-item">
+                <span>Bölüm 2</span>
+                <span>OKU →</span>
+            </a>
+            <!-- Yeni bölümleri buraya eklemeye devam edebilirsin -->
+        </div>
+
+        <!-- SEO Anahtar Kelimeler -->
+        <div class="seo-tags">
+            <span class="tag">manga oku</span>
+            <span class="tag">webtoon türkçe</span>
+            <span class="tag">at the end of the road türkçe oku</span>
+            <span class="tag">midnight manga</span>
+            <span class="tag">çeviri manga</span>
+            <span class="tag">dram webtoon</span>
+        </div>
     </div>
 
-    <br><br>
-    <a href="index.html" style="color: #9d4edd; text-decoration: none;">← Ana Sayfaya Dön</a>
 </body>
 </html>
