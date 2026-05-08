@@ -3,219 +3,49 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Midnight-Manga | Karanlığın Sesi</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <title>Midnight-Manga | Karanlık Dünyalara Açılan Kapı</title>
     <style>
-        :root {
-            --primary: #9d4edd; 
-            --bg: #0a0a0c;
-            --card: #161b22;
-            --text: #e6edf3;
-            --accent: #c9d1d9;
-        }
-
-        body {
-            background-color: var(--bg);
-            color: var(--text);
-            font-family: 'Inter', sans-serif;
-            margin: 0;
-        }
-
-        nav {
-            background: rgba(10, 10, 12, 0.95);
-            padding: 1rem 5%;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 1px solid #30363d;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-
-        .logo {
-            font-size: 1.5rem;
-            font-weight: 800;
-            color: var(--primary);
-            text-decoration: none;
-        }
-
-        .hero {
-            padding: 4rem 5%;
-            text-align: center;
-            background: linear-gradient(to bottom, #161b22, var(--bg));
-        }
-
-        .container { padding: 2rem 5%; max-width: 1300px; margin: 0 auto; }
-        
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            gap: 25px;
-        }
-
-        .manga-card {
-            background: var(--card);
-            border-radius: 12px;
-            overflow: hidden;
-            border: 1px solid #30363d;
-            transition: 0.3s;
-            position: relative;
-            cursor: pointer; /* Üstüne gelince el işareti çıkar */
-        }
-
-        .manga-card:hover { transform: translateY(-5px); border-color: var(--primary); }
-
-        .manga-img { width: 100%; height: 280px; object-fit: cover; }
-
-        .manga-content { padding: 15px; }
-
-        .manga-title { font-weight: bold; margin-bottom: 10px; font-size: 1rem; }
-
-        .chapter-btn {
-            background: #21262d;
-            color: var(--accent);
-            padding: 6px 12px;
-            border-radius: 6px;
-            text-decoration: none;
-            font-size: 0.8rem;
-            display: inline-block;
-        }
-
-        /* --- ADMIN PANEL --- */
-        #adminToggle {
-            position: fixed; bottom: 20px; right: 20px;
-            background: var(--primary); color: white; border: none;
-            padding: 12px; border-radius: 50%; cursor: pointer; z-index: 1000;
-        }
-
-        #adminPanel {
-            display: none; position: fixed; top: 50%; left: 50%;
-            transform: translate(-50%, -50%); background: var(--card);
-            padding: 2rem; border-radius: 15px; border: 2px solid var(--primary);
-            z-index: 1001; width: 90%; max-width: 400px;
-        }
-
-        .admin-input {
-            width: 100%; padding: 10px; margin: 10px 0;
-            background: #0d1117; border: 1px solid #30363d;
-            color: white; border-radius: 5px; box-sizing: border-box;
-        }
-
-        .btn-save {
-            background: var(--primary); color: white; width: 100%;
-            padding: 10px; border: none; border-radius: 5px; cursor: pointer;
-        }
-
-        .overlay {
-            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.8); z-index: 1000;
-        }
-
-        .delete-btn {
-            position: absolute; top: 10px; right: 10px;
-            background: rgba(255,0,0,0.8); color: white;
-            border: none; border-radius: 50%; width: 25px; height: 25px;
-            cursor: pointer; z-index: 10;
-        }
+        :root { --main-color: #9d4edd; --bg-color: #0a0a0c; --card-bg: #161b22; }
+        body { background-color: var(--bg-color); color: white; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding: 0; }
+        header { background: rgba(0,0,0,0.8); padding: 20px; text-align: center; border-bottom: 2px solid var(--main-color); position: sticky; top: 0; z-index: 1000; }
+        header h1 { margin: 0; color: var(--main-color); letter-spacing: 2px; text-transform: uppercase; }
+        .hero { text-align: center; padding: 60px 20px; background: linear-gradient(to bottom, #1a1a1a, #0a0a0c); }
+        .hero h2 { font-size: 2.5rem; margin-bottom: 10px; }
+        .hero p { color: #888; font-size: 1.1rem; }
+        .manga-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 30px; padding: 40px; max-width: 1200px; margin: 0 auto; }
+        .manga-card { background: var(--card-bg); border-radius: 15px; overflow: hidden; transition: 0.3s; border: 1px solid #30363d; position: relative; }
+        .manga-card:hover { transform: translateY(-10px); border-color: var(--main-color); box-shadow: 0 10px 20px rgba(157, 78, 221, 0.2); }
+        .manga-card img { width: 100%; height: 300px; object-fit: cover; }
+        .manga-info { padding: 15px; text-align: center; }
+        .manga-info a { color: white; text-decoration: none; font-weight: bold; font-size: 1.1rem; display: block; margin-bottom: 5px; }
+        .manga-info p { margin: 0; color: var(--main-color); font-size: 0.9rem; }
+        footer { text-align: center; padding: 40px; color: #666; border-top: 1px solid #1a1a1a; }
     </style>
 </head>
 <body>
 
-<nav>
-    <a href="#" class="logo">MIDNIGHT-MANGA</a>
-</nav>
+    <header>
+        <h1>MIDNIGHT-MANGA</h1>
+    </header>
 
-<div class="hero">
-    <h1>Karanlık Dünyalara Açılan Kapı</h1>
-    <p>En güncel manga ve webtoon çevirileri Midnight kalitesiyle.</p>
-</div>
+    <section class="hero">
+        <h2>Karanlık Dünyalara Açılan Kapı</h2>
+        <p>En güncel manga ve webtoon çevirileri Midnight kalitesiyle.</p>
+    </section>
 
-<div class="container">
-    <div class="grid" id="mangaGrid"></div>
-</div>
+    <div class="manga-container" id="manga-list">
+        <div class="manga-card">
+            <img src="at-the-end-of-the-road/b1/1%20(2).jpg" alt="At the End of the Road">
+            <div class="manga-info">
+                <a href="chapters.html?name=At-The-End-Of-The-Road">At the End of the Road</a>
+                <p>Tüm Bölümler</p>
+            </div>
+        </div>
+    </div>
 
-<button id="adminToggle" onclick="openAdmin()"><i class="fas fa-cog"></i></button>
+    <footer>
+        <p>&copy; 2026 Midnight-Manga. Tüm Hakları Saklıdır.</p>
+    </footer>
 
-<div class="overlay" id="overlay" onclick="closeAdmin()"></div>
-<div id="adminPanel">
-    <h3>Manga Ekle</h3>
-    <input type="password" id="adminPass" class="admin-input" placeholder="Şifre (1234)">
-    <input type="text" id="mName" class="admin-input" placeholder="Manga Adı">
-    <input type="text" id="mImg" class="admin-input" placeholder="Kapak Resmi URL">
-    <input type="text" id="mCap" class="admin-input" placeholder="Bölüm No (Örn: Bölüm 1)">
-    <input type="text" id="mUrl" class="admin-input" placeholder="Drive/Mega Linki (Tıklayınca açılacak yer)">
-    <button class="btn-save" onclick="saveManga()">Kaydet</button>
-</div>
-
-<script>
-    // Başlangıç Mangaları (Buraya eklediklerin HERKESE görünür)
-    let mangas = JSON.parse(localStorage.getItem('mangas')) || [
-        { 
-            name: "Örnek Seri", 
-            img: "https://via.placeholder.com/200x280/161b22/9d4edd?text=Midnight", 
-            cap: "Bölüm 1",
-            url: "https://google.com" 
-        }
-    ];
-
-    let isAdmin = false;
-
-    function renderMangas() {
-        const grid = document.getElementById('mangaGrid');
-        grid.innerHTML = '';
-        mangas.forEach((m, index) => {
-            grid.innerHTML += `
-                <div class="manga-card" onclick="window.open('${m.url}', '_blank')">
-                    <button class="delete-btn" onclick="event.stopPropagation(); deleteManga(${index})">×</button>
-                    <img src="${m.img}" class="manga-img" alt="${m.name}">
-                    <div class="manga-content">
-                        <div class="manga-title">${m.name}</div>
-                        <div class="chapter-btn">${m.cap}</div>
-                    </div>
-                </div>
-            `;
-        });
-    }
-
-    function openAdmin() {
-        document.getElementById('adminPanel').style.display = 'block';
-        document.getElementById('overlay').style.display = 'block';
-    }
-
-    function closeAdmin() {
-        document.getElementById('adminPanel').style.display = 'none';
-        document.getElementById('overlay').style.display = 'none';
-    }
-
-    function saveManga() {
-        const pass = document.getElementById('adminPass').value;
-        if(pass !== "1234") { alert("Şifre Yanlış!"); return; }
-        
-        const name = document.getElementById('mName').value;
-        const img = document.getElementById('mImg').value;
-        const cap = document.getElementById('mCap').value;
-        const url = document.getElementById('mUrl').value;
-
-        if(name && cap && url) {
-            mangas.unshift({ name, img: img || 'https://via.placeholder.com/200x280', cap, url });
-            localStorage.setItem('mangas', JSON.stringify(mangas));
-            renderMangas();
-            closeAdmin();
-        } else {
-            alert("Lütfen tüm alanları doldurun!");
-        }
-    }
-
-    function deleteManga(index) {
-        if(confirm("Silmek istediğine emin misin?")) {
-            mangas.splice(index, 1);
-            localStorage.setItem('mangas', JSON.stringify(mangas));
-            renderMangas();
-        }
-    }
-
-    renderMangas();
-</script>
 </body>
 </html>
