@@ -8,7 +8,7 @@
         body { background: #000; margin: 0; display: flex; flex-direction: column; align-items: center; color: white; font-family: sans-serif; }
         img { width: 100%; max-width: 800px; display: block; border-bottom: 2px solid #111; }
         .nav-top { padding: 20px; width: 100%; display: flex; justify-content: center; background: #0a0a0c; position: sticky; top: 0; z-index: 100; }
-        .nav-bottom { padding: 40px; display: flex; gap: 20px; }
+        .nav-bottom { padding: 40px; display: flex; gap: 20px; flex-wrap: wrap; justify-content: center; }
         .btn { background: #9d4edd; color: white; padding: 12px 25px; text-decoration: none; border-radius: 8px; font-weight: bold; transition: 0.3s; }
         .btn:hover { background: #7b2cbf; transform: scale(1.05); }
         .btn-home { background: #333; }
@@ -22,8 +22,8 @@
     <div id="imageContainer"></div>
 
     <div class="nav-bottom">
-        <a href="chapters.html" class="btn btn-home">Bölüm Listesi</a>
-        <a id="nextChapterBtn" href="#" class="btn" style="display: none;">Sonraki Bölüm →</a>
+        <a href="index.html" class="btn btn-home">Ana Sayfa</a>
+        <a id="nextChapterBtn" href="#" class="btn">Sonraki Bölüm →</a>
     </div>
 
     <script>
@@ -33,7 +33,7 @@
 
         if (folder && count) {
             renderImages(folder, count);
-            setupNextButton(folder);
+            checkAndSetupNextButton(folder);
         }
 
         function renderImages(folder, count) {
@@ -42,7 +42,6 @@
 
             for (let i = 1; i <= count; i++) {
                 const img = document.createElement('img');
-                // Senin b2 klasöründeki "2 (1).jpg" gibi isimleri bulan mantık
                 let src1 = `https://midnight-manga-tr.github.io/midnight-manga/${folder}/${folderNum}%20(${i}).jpg`;
                 if (i === 1) src1 = `https://midnight-manga-tr.github.io/midnight-manga/${folder}/${folderNum}.jpg`;
 
@@ -62,20 +61,32 @@
             }
         }
 
-        function setupNextButton(currentFolder) {
+        function checkAndSetupNextButton(currentFolder) {
             const nextBtn = document.getElementById('nextChapterBtn');
             const pathParts = currentFolder.split('/');
-            const lastPart = pathParts.pop(); // b1, b2 gibi
-            const mangaPath = pathParts.join('/'); // at-the-end-of-the-road
+            const lastPart = pathParts.pop(); 
+            const mangaPath = pathParts.join('/'); 
             
             const currentNum = parseInt(lastPart.replace('b', ''));
             const nextNum = currentNum + 1;
             const nextFolder = `${mangaPath}/b${nextNum}`;
+            
+            // Gelecek bölümün var olup olmadığını kontrol etmek için ilk resmini test ediyoruz
+            const testImg = new Image();
+            // Bir sonraki bölümün kapak resmi ismini tahmin ediyoruz (Örn: b3 ise 3.jpg)
+            testImg.src = `https://midnight-manga-tr.github.io/midnight-manga/${nextFolder}/${nextNum}.jpg`;
 
-            // Burada bir sonraki bölümün tahmini resim sayısını (Örn: 50) yazıyoruz. 
-            // Sen bölümleri yükledikçe bu buton çalışacaktır.
-            nextBtn.href = `reader.html?f=${nextFolder}&n=50`; 
-            nextBtn.style.display = 'inline-block';
+            testImg.onload = function() {
+                // Eğer resim yüklendiyse, sonraki bölüm vardır
+                nextBtn.href = `reader.html?f=${nextFolder}&n=50`;
+            };
+
+            testImg.onerror = function() {
+                // Eğer resim yüklenemezse (404), sonraki bölüm yoktur, ana sayfaya yönlendir
+                nextBtn.innerText = "Seri Bitti - Ana Sayfaya Dön";
+                nextBtn.href = "index.html";
+                nextBtn.style.background = "#333"; // Renk değiştirerek bittiğini belli edelim
+            };
         }
     </script>
 </body>
