@@ -5,6 +5,25 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Midnight Reader</title>
     <style>
+        .site-logo {
+    text-align: center;
+    padding: 20px 0;
+    width: 100%;
+}
+.site-logo a {
+    font-size: 32px;
+    font-weight: 800;
+    color: #9d4edd; /* Senin meşhur mor rengin */
+    text-decoration: none;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    transition: 0.3s;
+    display: inline-block;
+}
+.site-logo a:hover {
+    transform: scale(1.1);
+    text-shadow: 0 0 15px rgba(157, 78, 221, 0.6);
+}
         body { background: #000; margin: 0; display: flex; flex-direction: column; align-items: center; color: white; font-family: sans-serif; }
         
         #imageContainer { display: flex; flex-direction: column; align-items: center; width: 100%; }
@@ -48,6 +67,7 @@
 
     <!-- ÜST NAVİGASYON -->
     <div class="nav-bar nav-top">
+        <a href="index.html" style="color: #9d4edd; text-decoration: none; font-weight: bold; font-size: 18px; margin-right: auto; padding-right: 15px;">MIDNIGHT</a>
         <a id="prevBtnTop" href="#" class="btn btn-home">← Önceki</a>
         <select id="sizeAdjust" onchange="adjustSize(this.value)">
             <option value="100%">%100</option>
