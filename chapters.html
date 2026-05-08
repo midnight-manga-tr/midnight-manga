@@ -20,6 +20,16 @@
         .seo-tags { margin-top: 40px; padding: 20px; border-top: 1px solid #222; text-align: center; }
         .tag { display: inline-block; background: #1a1a1a; color: #666; padding: 6px 15px; border-radius: 20px; font-size: 0.75rem; margin: 4px; border: 1px solid #333; }
         .back-btn { display: inline-block; margin-bottom: 15px; color: var(--main-color); text-decoration: none; font-weight: bold; font-size: 0.9rem; }
+        /* Aydınlık Mod Renkleri */
+body.light-mode { background-color: #f0f2f5 !important; color: #1a1a1a !important; }
+body.light-mode .manga-card, 
+body.light-mode .container, 
+body.light-mode .description, 
+body.light-mode .chapter-item { 
+    background: #ffffff !important; 
+    color: #1a1a1a !important; 
+    border-color: #ddd !important; 
+}
     </style>
 </head>
     <!-- Başa Dön Butonu -->
@@ -84,6 +94,10 @@ function scrollFunction() {
 function topFunction() {
   window.scrollTo({top: 0, behavior: 'smooth'});
 }
+    function toggleMode() {
+  document.body.classList.toggle("light-mode");
+}
 </script>
+    <button onclick="toggleMode()" id="modeToggle" style="position: fixed; top: 20px; left: 20px; z-index: 1001; background: #333; color: white; border: none; padding: 10px; border-radius: 5px; cursor: pointer;">🌓 Mod Değiştir</button>
 </body>
 </html>
