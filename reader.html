@@ -7,84 +7,63 @@
     <style>
         body { background: #000; margin: 0; display: flex; flex-direction: column; align-items: center; color: white; font-family: sans-serif; }
         
-        /* Resimlerin ortalanması */
-        #imageContainer { 
-            display: flex; 
-            flex-direction: column; 
-            align-items: center; 
-            width: 100%; 
-        }
-
+        #imageContainer { display: flex; flex-direction: column; align-items: center; width: 100%; }
         img { width: 100%; max-width: 800px; display: block; border-bottom: 2px solid #111; transition: 0.3s; }
         
-        /* Üst Menü Çubuğu */
-        .nav-top { 
+        /* Üst ve Alt Menü Çubuğu */
+        .nav-bar { 
             padding: 15px; 
             width: 100%; 
             display: flex; 
             justify-content: center; 
             align-items: center; 
             background: #0a0a0c; 
-            position: sticky; 
-            top: 0; 
             z-index: 100; 
-            gap: 15px; 
-            border-bottom: 1px solid #9d4edd;
+            gap: 10px; 
+            flex-wrap: wrap;
         }
-
-        .nav-bottom { padding: 40px; display: flex; gap: 20px; flex-wrap: wrap; justify-content: center; }
+        .nav-top { position: sticky; top: 0; border-bottom: 1px solid #9d4edd; }
+        .nav-bottom { padding: 40px; border-top: 1px solid #222; }
         
-        .btn { background: #9d4edd; color: white; padding: 12px 25px; text-decoration: none; border-radius: 8px; font-weight: bold; transition: 0.3s; border: none; cursor: pointer; }
+        .btn { background: #9d4edd; color: white; padding: 10px 20px; text-decoration: none; border-radius: 8px; font-weight: bold; transition: 0.3s; border: none; cursor: pointer; font-size: 14px; }
         .btn:hover { background: #7b2cbf; transform: scale(1.05); }
         .btn-home { background: #333; }
 
-        /* Boyut Seçim Kutusu */
         #sizeAdjust { background: #333; color: white; border: 1px solid #9d4edd; padding: 10px; border-radius: 5px; cursor: pointer; font-weight: bold; }
         
-        /* BAŞA DÖN BUTONU STİLİ (BURASI ÖNEMLİ) */
+        /* Başa Dön Butonu */
         #backToTop { 
-            display: none; 
-            position: fixed; 
-            bottom: 30px; 
-            right: 30px; 
-            z-index: 999; 
-            border: none; 
-            background-color: #9d4edd; 
-            color: white; 
-            cursor: pointer; 
-            padding: 15px 20px; 
-            border-radius: 50%; 
-            font-size: 20px; 
-            font-weight: bold;
-            box-shadow: 0 4px 15px rgba(157, 78, 221, 0.4); 
-            transition: 0.3s; 
+            display: none; position: fixed; bottom: 30px; right: 30px; z-index: 999; 
+            border: none; background-color: #9d4edd; color: white; cursor: pointer; 
+            padding: 15px 20px; border-radius: 50%; font-size: 20px; 
+            box-shadow: 0 4px 15px rgba(157, 78, 221, 0.4); transition: 0.3s; 
         }
-        #backToTop:hover { background-color: #7b2cbf; transform: translateY(-5px); }
     </style>
 </head>
 <body>
 
-    <!-- Üst Navigasyon -->
-    <div class="nav-top">
+    <!-- ÜST NAVİGASYON -->
+    <div class="nav-bar nav-top">
+        <a id="prevBtnTop" href="#" class="btn btn-home">← Önceki</a>
         <select id="sizeAdjust" onchange="adjustSize(this.value)">
-            <option value="100%">Boyut: %100</option>
-            <option value="80%">Boyut: %80</option>
-            <option value="60%">Boyut: %60</option>
-            <option value="40%">Boyut: %40</option>
+            <option value="100%">%100</option>
+            <option value="80%">%80</option>
+            <option value="60%">%60</option>
         </select>
-        <a href="chapters.html" class="btn btn-home">← Bölümler</a>
+        <a href="chapters.html" class="btn btn-home">Bölümler</a>
+        <a id="nextBtnTop" href="#" class="btn">Sonraki →</a>
     </div>
 
     <!-- Manga Resimleri -->
     <div id="imageContainer"></div>
 
-    <!-- Alt Navigasyon -->
-    <div class="nav-bottom">
-        <a href="index.html" class="btn btn-home">Ana Sayfa</a>
-        <a id="nextChapterBtn" href="#" class="btn">Sonraki Bölüm →</a>
+    <!-- ALT NAVİGASYON -->
+    <div class="nav-bar nav-bottom">
+        <a id="prevBtnBottom" href="#" class="btn btn-home">← Önceki Bölüm</a>
+        <a href="chapters.html" class="btn btn-home">Bölüm Listesi</a>
+        <a id="nextBtnBottom" href="#" class="btn">Sonraki Bölüm →</a>
     </div>
 
-    <!-- İŞTE O EKSİK BUTON -->
     <button onclick="topFunction()" id="backToTop" title="En Üste Git">↑</button>
 
     <script>
@@ -94,7 +73,7 @@
 
         if (folder && count) {
             renderImages(folder, count);
-            checkAndSetupNextButton(folder);
+            setupNavigation(folder);
         }
 
         function renderImages(folder, count) {
@@ -122,31 +101,45 @@
             }
         }
 
-        function checkAndSetupNextButton(currentFolder) {
-            const nextBtn = document.getElementById('nextChapterBtn');
+        function setupNavigation(currentFolder) {
+            const nextBtns = [document.getElementById('nextBtnTop'), document.getElementById('nextBtnBottom')];
+            const prevBtns = [document.getElementById('prevBtnTop'), document.getElementById('prevBtnBottom')];
+            
             const pathParts = currentFolder.split('/');
             const lastPart = pathParts.pop(); 
             const mangaPath = pathParts.join('/'); 
             
             const currentNum = parseInt(lastPart.replace('b', ''));
+            
+            // Önceki Bölüm Ayarı
+            if (currentNum > 1) {
+                const prevUrl = `reader.html?f=${mangaPath}/b${currentNum - 1}&n=50`;
+                prevBtns.forEach(b => b.href = prevUrl);
+            } else {
+                prevBtns.forEach(b => b.style.display = 'none');
+            }
+
+            // Sonraki Bölüm Kontrolü
             const nextNum = currentNum + 1;
             const nextFolder = `${mangaPath}/b${nextNum}`;
-            
             const testImg = new Image();
             testImg.src = `https://midnight-manga-tr.github.io/midnight-manga/${nextFolder}/${nextNum}.jpg`;
 
             testImg.onload = function() {
-                nextBtn.href = `reader.html?f=${nextFolder}&n=50`;
+                const nextUrl = `reader.html?f=${nextFolder}&n=50`;
+                nextBtns.forEach(b => b.href = nextUrl);
             };
 
             testImg.onerror = function() {
-                nextBtn.innerText = "Seri Bitti - Ana Sayfaya Dön";
-                nextBtn.href = "index.html";
-                nextBtn.style.background = "#333";
+                nextBtns.forEach(b => {
+                    b.innerText = "Bölüm Bitti - Seriye Dön";
+                    // BURASI ÖNEMLİ: index.html yerine chapters.html'e döner
+                    b.href = "chapters.html"; 
+                    b.style.background = "#333";
+                });
             };
         }
 
-        // Boyut Ayarı Fonksiyonu
         function adjustSize(val) {
             const images = document.querySelectorAll('#imageContainer img');
             images.forEach(img => {
@@ -155,10 +148,7 @@
             });
         }
 
-        // BAŞA DÖNME FONKSİYONLARI
         let mybutton = document.getElementById("backToTop");
-
-        // Sayfa 300px aşağı inince butonu göster
         window.onscroll = function() {
             if (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300) {
                 mybutton.style.display = "block";
@@ -167,7 +157,6 @@
             }
         };
 
-        // Tıklayınca pürüzsüzce yukarı çıkar
         function topFunction() {
             window.scrollTo({top: 0, behavior: 'smooth'});
         }
