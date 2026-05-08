@@ -10,7 +10,6 @@
         #imageContainer { display: flex; flex-direction: column; align-items: center; width: 100%; }
         img { width: 100%; max-width: 800px; display: block; border-bottom: 2px solid #111; transition: 0.3s; }
         
-        /* Üst ve Alt Menü Çubuğu */
         .nav-bar { 
             padding: 15px; 
             width: 100%; 
@@ -23,7 +22,13 @@
             flex-wrap: wrap;
         }
         .nav-top { position: sticky; top: 0; border-bottom: 1px solid #9d4edd; }
-        .nav-bottom { padding: 40px; border-top: 1px solid #222; }
+        
+        /* Bölüm bittiğinde ferahlık sağlayan boşluk alanı */
+        .nav-bottom { 
+            padding: 100px 40px 60px 40px; /* Üstten 100px boşluk bırakarak ferahlık sağladık */
+            border-top: 1px solid #222; 
+            margin-top: 50px;
+        }
         
         .btn { background: #9d4edd; color: white; padding: 10px 20px; text-decoration: none; border-radius: 8px; font-weight: bold; transition: 0.3s; border: none; cursor: pointer; font-size: 14px; }
         .btn:hover { background: #7b2cbf; transform: scale(1.05); }
@@ -31,7 +36,6 @@
 
         #sizeAdjust { background: #333; color: white; border: 1px solid #9d4edd; padding: 10px; border-radius: 5px; cursor: pointer; font-weight: bold; }
         
-        /* Başa Dön Butonu */
         #backToTop { 
             display: none; position: fixed; bottom: 30px; right: 30px; z-index: 999; 
             border: none; background-color: #9d4edd; color: white; cursor: pointer; 
@@ -50,17 +54,19 @@
             <option value="80%">%80</option>
             <option value="60%">%60</option>
         </select>
-        <a href="chapters.html" class="btn btn-home">Bölümler</a>
+        <!-- Kısayol: Sayfa sonuna kaydırır -->
+        <button onclick="scrollToBottom()" class="btn btn-home">Bölüm Listesi ↓</button>
         <a id="nextBtnTop" href="#" class="btn">Sonraki →</a>
     </div>
 
     <!-- Manga Resimleri -->
     <div id="imageContainer"></div>
 
-    <!-- ALT NAVİGASYON -->
-    <div class="nav-bar nav-bottom">
+    <!-- ALT NAVİGASYON (ID eklendi: bölüm listesi buraya kayacak) -->
+    <div id="bottomNav" class="nav-bar nav-bottom">
         <a id="prevBtnBottom" href="#" class="btn btn-home">← Önceki Bölüm</a>
-        <a href="chapters.html" class="btn btn-home">Bölüm Listesi</a>
+        <!-- Bu buton serinin ana sayfasına döner -->
+        <a href="chapters.html" class="btn btn-home">Seri Sayfasına Dön</a>
         <a id="nextBtnBottom" href="#" class="btn">Sonraki Bölüm →</a>
     </div>
 
@@ -111,7 +117,6 @@
             
             const currentNum = parseInt(lastPart.replace('b', ''));
             
-            // Önceki Bölüm Ayarı
             if (currentNum > 1) {
                 const prevUrl = `reader.html?f=${mangaPath}/b${currentNum - 1}&n=50`;
                 prevBtns.forEach(b => b.href = prevUrl);
@@ -119,7 +124,6 @@
                 prevBtns.forEach(b => b.style.display = 'none');
             }
 
-            // Sonraki Bölüm Kontrolü
             const nextNum = currentNum + 1;
             const nextFolder = `${mangaPath}/b${nextNum}`;
             const testImg = new Image();
@@ -133,11 +137,15 @@
             testImg.onerror = function() {
                 nextBtns.forEach(b => {
                     b.innerText = "Bölüm Bitti - Seriye Dön";
-                    // BURASI ÖNEMLİ: index.html yerine chapters.html'e döner
                     b.href = "chapters.html"; 
                     b.style.background = "#333";
                 });
             };
+        }
+
+        // Bölüm listesine pürüzsüz kaydırma fonksiyonu
+        function scrollToBottom() {
+            document.getElementById('bottomNav').scrollIntoView({ behavior: 'smooth' });
         }
 
         function adjustSize(val) {
