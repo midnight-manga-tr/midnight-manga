@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="tr">
 <head>
@@ -6,16 +7,40 @@
     <title>Midnight Reader</title>
     <style>
         body { background: #000; margin: 0; display: flex; flex-direction: column; align-items: center; color: white; font-family: sans-serif; }
-        img { width: 100%; max-width: 800px; display: block; border-bottom: 2px solid #111; }
-        .nav-top { padding: 20px; width: 100%; display: flex; justify-content: center; background: #0a0a0c; position: sticky; top: 0; z-index: 100; }
+        
+        /* Resimlerin küçüldüğünde ortalanması için konteyner ayarı */
+        #imageContainer { 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            width: 100%; 
+        }
+
+        img { width: 100%; max-width: 800px; display: block; border-bottom: 2px solid #111; transition: 0.3s; }
+        
+        .nav-top { padding: 20px; width: 100%; display: flex; justify-content: center; align-items: center; background: #0a0a0c; position: sticky; top: 0; z-index: 100; gap: 15px; }
         .nav-bottom { padding: 40px; display: flex; gap: 20px; flex-wrap: wrap; justify-content: center; }
-        .btn { background: #9d4edd; color: white; padding: 12px 25px; text-decoration: none; border-radius: 8px; font-weight: bold; transition: 0.3s; }
+        
+        .btn { background: #9d4edd; color: white; padding: 12px 25px; text-decoration: none; border-radius: 8px; font-weight: bold; transition: 0.3s; border: none; cursor: pointer; }
         .btn:hover { background: #7b2cbf; transform: scale(1.05); }
         .btn-home { background: #333; }
+
+        /* Boyut Ayar Menüsü Stili */
+        #sizeAdjust { background: #333; color: white; border: none; padding: 10px; border-radius: 5px; cursor: pointer; font-weight: bold; outline: none; }
+        
+        /* Başa Dön Butonu */
+        #backToTop { display: none; position: fixed; bottom: 20px; right: 30px; z-index: 99; border: none; outline: none; background-color: #9d4edd; color: white; cursor: pointer; padding: 15px; border-radius: 50%; font-size: 18px; box-shadow: 0 4px 8px rgba(0,0,0,0.3); transition: 0.3s; }
     </style>
 </head>
 <body>
+
     <div class="nav-top">
+        <select id="sizeAdjust" onchange="adjustSize(this.value)">
+            <option value="100%">Resim Boyutu: %100</option>
+            <option value="80%">Resim Boyutu: %80</option>
+            <option value="60%">Resim Boyutu: %60</option>
+            <option value="50%">Resim Boyutu: %50</option>
+        </select>
         <a href="chapters.html" class="btn btn-home">← Bölüm Listesi</a>
     </div>
 
@@ -25,6 +50,8 @@
         <a href="index.html" class="btn btn-home">Ana Sayfa</a>
         <a id="nextChapterBtn" href="#" class="btn">Sonraki Bölüm →</a>
     </div>
+
+    <button onclick="topFunction()" id="backToTop" title="Başa Dön">↑</button>
 
     <script>
         const params = new URLSearchParams(window.location.search);
@@ -71,40 +98,44 @@
             const nextNum = currentNum + 1;
             const nextFolder = `${mangaPath}/b${nextNum}`;
             
-            // Gelecek bölümün var olup olmadığını kontrol etmek için ilk resmini test ediyoruz
             const testImg = new Image();
-            // Bir sonraki bölümün kapak resmi ismini tahmin ediyoruz (Örn: b3 ise 3.jpg)
             testImg.src = `https://midnight-manga-tr.github.io/midnight-manga/${nextFolder}/${nextNum}.jpg`;
 
             testImg.onload = function() {
-                // Eğer resim yüklendiyse, sonraki bölüm vardır
                 nextBtn.href = `reader.html?f=${nextFolder}&n=50`;
             };
 
             testImg.onerror = function() {
-                // Eğer resim yüklenemezse (404), sonraki bölüm yoktur, ana sayfaya yönlendir
                 nextBtn.innerText = "Seri Bitti - Ana Sayfaya Dön";
                 nextBtn.href = "index.html";
-                nextBtn.style.background = "#333"; // Renk değiştirerek bittiğini belli edelim
+                nextBtn.style.background = "#333";
             };
         }
+
+        // RESİM BOYUTU FONKSİYONU
+        function adjustSize(val) {
+            const images = document.querySelectorAll('#imageContainer img');
+            images.forEach(img => {
+                img.style.width = val;
+                img.style.maxWidth = val; 
+            });
+        }
+
+        // BAŞA DÖN BUTONU FONKSİYONLARI
+        let mybutton = document.getElementById("backToTop");
+        window.onscroll = function() {scrollFunction()};
+
+        function scrollFunction() {
+            if (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300) {
+                mybutton.style.display = "block";
+            } else {
+                mybutton.style.display = "none";
+            }
+        }
+
+        function topFunction() {
+            window.scrollTo({top: 0, behavior: 'smooth'});
+        }
     </script>
-    <script>
-let mybutton = document.getElementById("backToTop");
-window.onscroll = function() {scrollFunction()};
-
-function scrollFunction() {
-  if (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300) {
-    mybutton.style.display = "block";
-  } else {
-    mybutton.style.display = "none";
-  }
-}
-
-function topFunction() {
-  window.scrollTo({top: 0, behavior: 'smooth'});
-}
-</script>
-    <button onclick="topFunction()" id="backToTop" title="Başa Dön" style="display: none; position: fixed; bottom: 20px; right: 30px; z-index: 99; border: none; outline: none; background-color: #9d4edd; color: white; cursor: pointer; padding: 15px; border-radius: 50%; font-size: 18px; box-shadow: 0 4px 8px rgba(0,0,0,0.3); transition: 0.3s;">↑</button>
 </body>
 </html>
