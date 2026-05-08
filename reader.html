@@ -5,18 +5,26 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Midnight Reader</title>
     <style>
-        body { background: #000; margin: 0; display: flex; flex-direction: column; align-items: center; }
+        body { background: #000; margin: 0; display: flex; flex-direction: column; align-items: center; color: white; font-family: sans-serif; }
         img { width: 100%; max-width: 800px; display: block; border-bottom: 2px solid #111; }
-        .nav { padding: 20px; width: 100%; display: flex; justify-content: center; background: #0a0a0c; position: sticky; top: 0; z-index: 100; }
-        .btn { background: #9d4edd; color: white; padding: 12px 25px; text-decoration: none; border-radius: 8px; font-family: sans-serif; font-weight: bold; }
+        .nav-top { padding: 20px; width: 100%; display: flex; justify-content: center; background: #0a0a0c; position: sticky; top: 0; z-index: 100; }
+        .nav-bottom { padding: 40px; display: flex; gap: 20px; }
+        .btn { background: #9d4edd; color: white; padding: 12px 25px; text-decoration: none; border-radius: 8px; font-weight: bold; transition: 0.3s; }
+        .btn:hover { background: #7b2cbf; transform: scale(1.05); }
+        .btn-home { background: #333; }
     </style>
 </head>
 <body>
-    <div class="nav">
-        <a href="chapters.html" class="btn">← Bölümlere Dön</a>
+    <div class="nav-top">
+        <a href="chapters.html" class="btn btn-home">← Bölüm Listesi</a>
     </div>
 
     <div id="imageContainer"></div>
+
+    <div class="nav-bottom">
+        <a href="chapters.html" class="btn btn-home">Bölüm Listesi</a>
+        <a id="nextChapterBtn" href="#" class="btn" style="display: none;">Sonraki Bölüm →</a>
+    </div>
 
     <script>
         const params = new URLSearchParams(window.location.search);
@@ -24,41 +32,50 @@
         const count = parseInt(params.get('n'));
 
         if (folder && count) {
+            renderImages(folder, count);
+            setupNextButton(folder);
+        }
+
+        function renderImages(folder, count) {
             const container = document.getElementById('imageContainer');
-            const folderNum = folder.split('b').pop(); // b1 -> 1, b2 -> 2
+            const folderNum = folder.split('b').pop(); 
 
             for (let i = 1; i <= count; i++) {
                 const img = document.createElement('img');
-                
-                // 1. DENE: Senin b2 klasöründeki gibi "2 (1).jpg", "2 (2).jpg" formatı
-                let primarySrc = `https://midnight-manga-tr.github.io/midnight-manga/${folder}/${folderNum}%20(${i}).jpg`;
-                
-                // 2. DENE: Eğer tek başına olan "2.jpg" gibi bir dosya varsa (genelde ilk sayfa)
-                if (i === 1) {
-                    primarySrc = `https://midnight-manga-tr.github.io/midnight-manga/${folder}/${folderNum}.jpg`;
-                }
+                // Senin b2 klasöründeki "2 (1).jpg" gibi isimleri bulan mantık
+                let src1 = `https://midnight-manga-tr.github.io/midnight-manga/${folder}/${folderNum}%20(${i}).jpg`;
+                if (i === 1) src1 = `https://midnight-manga-tr.github.io/midnight-manga/${folder}/${folderNum}.jpg`;
 
-                img.src = primarySrc;
-
-                // HATA YÖNETİMİ: Eğer yukarıdaki isimler tutmazsa diğer tüm ihtimalleri dene
+                img.src = src1;
                 img.onerror = function() {
-                    const tries = [
-                        `https://midnight-manga-tr.github.io/midnight-manga/${folder}/1%20(${i}).jpg`, // b1 tarzı
-                        `https://midnight-manga-tr.github.io/midnight-manga/${folder}/${i}.jpg`,      // Düz 1.jpg tarzı
-                        `https://midnight-manga-tr.github.io/midnight-manga/${folder}/1%20(${i+1}).jpg` // Kaymış parantez
+                    const altPaths = [
+                        `https://midnight-manga-tr.github.io/midnight-manga/${folder}/1%20(${i}).jpg`,
+                        `https://midnight-manga-tr.github.io/midnight-manga/${folder}/${i}.jpg`
                     ];
-
                     let currentTry = parseInt(this.getAttribute('data-try') || 0);
-                    if (currentTry < tries.length) {
+                    if (currentTry < altPaths.length) {
                         this.setAttribute('data-try', currentTry + 1);
-                        this.src = tries[currentTry];
-                    } else {
-                        this.style.display = 'none'; // Hiçbiri olmazsa gizle
-                    }
+                        this.src = altPaths[currentTry];
+                    } else { this.style.display = 'none'; }
                 };
-
                 container.appendChild(img);
             }
+        }
+
+        function setupNextButton(currentFolder) {
+            const nextBtn = document.getElementById('nextChapterBtn');
+            const pathParts = currentFolder.split('/');
+            const lastPart = pathParts.pop(); // b1, b2 gibi
+            const mangaPath = pathParts.join('/'); // at-the-end-of-the-road
+            
+            const currentNum = parseInt(lastPart.replace('b', ''));
+            const nextNum = currentNum + 1;
+            const nextFolder = `${mangaPath}/b${nextNum}`;
+
+            // Burada bir sonraki bölümün tahmini resim sayısını (Örn: 50) yazıyoruz. 
+            // Sen bölümleri yükledikçe bu buton çalışacaktır.
+            nextBtn.href = `reader.html?f=${nextFolder}&n=50`; 
+            nextBtn.style.display = 'inline-block';
         }
     </script>
 </body>
