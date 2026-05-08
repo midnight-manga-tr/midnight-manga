@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="tr">
 <head>
@@ -8,7 +7,7 @@
     <style>
         body { background: #000; margin: 0; display: flex; flex-direction: column; align-items: center; color: white; font-family: sans-serif; }
         
-        /* Resimlerin küçüldüğünde ortalanması için konteyner ayarı */
+        /* Resimlerin ortalanması */
         #imageContainer { 
             display: flex; 
             flex-direction: column; 
@@ -18,40 +17,75 @@
 
         img { width: 100%; max-width: 800px; display: block; border-bottom: 2px solid #111; transition: 0.3s; }
         
-        .nav-top { padding: 20px; width: 100%; display: flex; justify-content: center; align-items: center; background: #0a0a0c; position: sticky; top: 0; z-index: 100; gap: 15px; }
+        /* Üst Menü Çubuğu */
+        .nav-top { 
+            padding: 15px; 
+            width: 100%; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            background: #0a0a0c; 
+            position: sticky; 
+            top: 0; 
+            z-index: 100; 
+            gap: 15px; 
+            border-bottom: 1px solid #9d4edd;
+        }
+
         .nav-bottom { padding: 40px; display: flex; gap: 20px; flex-wrap: wrap; justify-content: center; }
         
         .btn { background: #9d4edd; color: white; padding: 12px 25px; text-decoration: none; border-radius: 8px; font-weight: bold; transition: 0.3s; border: none; cursor: pointer; }
         .btn:hover { background: #7b2cbf; transform: scale(1.05); }
         .btn-home { background: #333; }
 
-        /* Boyut Ayar Menüsü Stili */
-        #sizeAdjust { background: #333; color: white; border: none; padding: 10px; border-radius: 5px; cursor: pointer; font-weight: bold; outline: none; }
+        /* Boyut Seçim Kutusu */
+        #sizeAdjust { background: #333; color: white; border: 1px solid #9d4edd; padding: 10px; border-radius: 5px; cursor: pointer; font-weight: bold; }
         
-        /* Başa Dön Butonu */
-        #backToTop { display: none; position: fixed; bottom: 20px; right: 30px; z-index: 99; border: none; outline: none; background-color: #9d4edd; color: white; cursor: pointer; padding: 15px; border-radius: 50%; font-size: 18px; box-shadow: 0 4px 8px rgba(0,0,0,0.3); transition: 0.3s; }
+        /* BAŞA DÖN BUTONU STİLİ (BURASI ÖNEMLİ) */
+        #backToTop { 
+            display: none; 
+            position: fixed; 
+            bottom: 30px; 
+            right: 30px; 
+            z-index: 999; 
+            border: none; 
+            background-color: #9d4edd; 
+            color: white; 
+            cursor: pointer; 
+            padding: 15px 20px; 
+            border-radius: 50%; 
+            font-size: 20px; 
+            font-weight: bold;
+            box-shadow: 0 4px 15px rgba(157, 78, 221, 0.4); 
+            transition: 0.3s; 
+        }
+        #backToTop:hover { background-color: #7b2cbf; transform: translateY(-5px); }
     </style>
 </head>
 <body>
 
+    <!-- Üst Navigasyon -->
     <div class="nav-top">
         <select id="sizeAdjust" onchange="adjustSize(this.value)">
-            <option value="100%">Resim Boyutu: %100</option>
-            <option value="80%">Resim Boyutu: %80</option>
-            <option value="60%">Resim Boyutu: %60</option>
-            <option value="50%">Resim Boyutu: %50</option>
+            <option value="100%">Boyut: %100</option>
+            <option value="80%">Boyut: %80</option>
+            <option value="60%">Boyut: %60</option>
+            <option value="40%">Boyut: %40</option>
         </select>
-        <a href="chapters.html" class="btn btn-home">← Bölüm Listesi</a>
+        <a href="chapters.html" class="btn btn-home">← Bölümler</a>
     </div>
 
+    <!-- Manga Resimleri -->
     <div id="imageContainer"></div>
 
+    <!-- Alt Navigasyon -->
     <div class="nav-bottom">
         <a href="index.html" class="btn btn-home">Ana Sayfa</a>
         <a id="nextChapterBtn" href="#" class="btn">Sonraki Bölüm →</a>
     </div>
 
-    <button onclick="topFunction()" id="backToTop" title="Başa Dön">↑</button>
+    <!-- İŞTE O EKSİK BUTON -->
+    <button onclick="topFunction()" id="backToTop" title="En Üste Git">↑</button>
 
     <script>
         const params = new URLSearchParams(window.location.search);
@@ -112,7 +146,7 @@
             };
         }
 
-        // RESİM BOYUTU FONKSİYONU
+        // Boyut Ayarı Fonksiyonu
         function adjustSize(val) {
             const images = document.querySelectorAll('#imageContainer img');
             images.forEach(img => {
@@ -121,18 +155,19 @@
             });
         }
 
-        // BAŞA DÖN BUTONU FONKSİYONLARI
+        // BAŞA DÖNME FONKSİYONLARI
         let mybutton = document.getElementById("backToTop");
-        window.onscroll = function() {scrollFunction()};
 
-        function scrollFunction() {
+        // Sayfa 300px aşağı inince butonu göster
+        window.onscroll = function() {
             if (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300) {
                 mybutton.style.display = "block";
             } else {
                 mybutton.style.display = "none";
             }
-        }
+        };
 
+        // Tıklayınca pürüzsüzce yukarı çıkar
         function topFunction() {
             window.scrollTo({top: 0, behavior: 'smooth'});
         }
