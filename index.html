@@ -21,23 +21,37 @@
             margin: 0;
         }
 
+        /* --- SİTE LOGO STİLİ --- */
+        .site-logo {
+            text-align: center;
+            padding: 30px 0 10px 0;
+            width: 100%;
+        }
+        .site-logo a {
+            font-size: 42px;
+            font-weight: 900;
+            color: var(--primary);
+            text-decoration: none;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            transition: 0.3s;
+            display: inline-block;
+        }
+        .site-logo a:hover {
+            transform: scale(1.05);
+            text-shadow: 0 0 20px rgba(157, 78, 221, 0.5);
+        }
+
         nav {
             background: rgba(10, 10, 12, 0.95);
             padding: 1rem 5%;
             display: flex;
-            justify-content: space-between;
+            justify-content: center; /* Logoyu merkeze aldık */
             align-items: center;
             border-bottom: 1px solid #30363d;
             position: sticky;
             top: 0;
             z-index: 100;
-        }
-
-        .logo {
-            font-size: 1.5rem;
-            font-weight: 800;
-            color: var(--primary);
-            text-decoration: none;
         }
 
         .hero {
@@ -61,15 +75,12 @@
             border: 1px solid #30363d;
             transition: 0.3s;
             position: relative;
-            cursor: pointer; /* Üstüne gelince el işareti çıkar */
+            cursor: pointer;
         }
 
         .manga-card:hover { transform: translateY(-5px); border-color: var(--primary); }
-
         .manga-img { width: 100%; height: 280px; object-fit: cover; }
-
         .manga-content { padding: 15px; }
-
         .manga-title { font-weight: bold; margin-bottom: 10px; font-size: 1rem; }
 
         .chapter-btn {
@@ -82,10 +93,25 @@
             display: inline-block;
         }
 
+        /* --- BUTONLAR --- */
+        #backToTop { 
+            display: none; position: fixed; bottom: 20px; right: 20px; 
+            z-index: 999; border: none; background-color: var(--primary); 
+            color: white; cursor: pointer; padding: 15px; border-radius: 50%; 
+            font-size: 18px; box-shadow: 0 4px 8px rgba(0,0,0,0.3); transition: 0.3s; 
+        }
+
+        #modeToggle { 
+            position: fixed; top: 20px; left: 20px; z-index: 1001; 
+            background: #333; color: white; border: 1px solid var(--primary); 
+            padding: 10px; border-radius: 8px; cursor: pointer; transition: 0.3s;
+        }
+        #modeToggle:hover { background: var(--primary); }
+
         /* --- ADMIN PANEL --- */
         #adminToggle {
-            position: fixed; bottom: 20px; right: 20px;
-            background: var(--primary); color: white; border: none;
+            position: fixed; bottom: 20px; left: 20px;
+            background: #21262d; color: white; border: none;
             padding: 12px; border-radius: 50%; cursor: pointer; z-index: 1000;
         }
 
@@ -118,137 +144,138 @@
             border: none; border-radius: 50%; width: 25px; height: 25px;
             cursor: pointer; z-index: 10;
         }
-        /* Aydınlık Mod Renkleri */
-body.light-mode { background-color: #f0f2f5 !important; color: #1a1a1a !important; }
-body.light-mode .manga-card, 
-body.light-mode .container, 
-body.light-mode .description, 
-body.light-mode .chapter-item { 
-    background: #ffffff !important; 
-    color: #1a1a1a !important; 
-    border-color: #ddd !important; 
-}
+
+        /* Aydınlık Mod */
+        body.light-mode { background-color: #f0f2f5 !important; color: #1a1a1a !important; }
+        body.light-mode .manga-card, 
+        body.light-mode .container, 
+        body.light-mode .chapter-item { 
+            background: #ffffff !important; 
+            color: #1a1a1a !important; 
+            border-color: #ddd !important; 
+        }
+        body.light-mode nav { background: #fff; border-bottom: 1px solid #ddd; }
     </style>
 </head>
 <body>
 
-<nav>
-    <a href="#" class="logo">MIDNIGHT-MANGA</a>
-</nav>
+    <!-- SİTE LOGOSU -->
+    <div class="site-logo">
+        <a href="index.html">MIDNIGHT MANGA</a>
+    </div>
 
-<div class="hero">
-    <h1>Karanlık Dünyalara Açılan Kapı</h1>
-    <p>En güncel manga ve webtoon çevirileri Midnight kalitesiyle.</p>
-</div>
+    <nav>
+        <span style="color: var(--primary); font-weight: bold; letter-spacing: 1px;">KARANLIĞIN SESİ</span>
+    </nav>
 
-<div class="container">
-    <div class="grid" id="mangaGrid"></div>
-</div>
+    <div class="hero">
+        <h1>Karanlık Dünyalara Açılan Kapı</h1>
+        <p>En güncel manga ve webtoon çevirileri Midnight kalitesiyle.</p>
+    </div>
 
-<button id="adminToggle" onclick="openAdmin()"><i class="fas fa-cog"></i></button>
+    <div class="container">
+        <div class="grid" id="mangaGrid"></div>
+    </div>
 
-<div class="overlay" id="overlay" onclick="closeAdmin()"></div>
-<div id="adminPanel">
-    <h3>Manga Ekle</h3>
-    <input type="password" id="adminPass" class="admin-input" placeholder="Şifre (1234)">
-    <input type="text" id="mName" class="admin-input" placeholder="Manga Adı">
-    <input type="text" id="mImg" class="admin-input" placeholder="Kapak Resmi URL">
-    <input type="text" id="mCap" class="admin-input" placeholder="Bölüm No (Örn: Bölüm 1)">
-    <input type="text" id="mUrl" class="admin-input" placeholder="Drive/Mega Linki (Tıklayınca açılacak yer)">
-    <button class="btn-save" onclick="saveManga()">Kaydet</button>
-</div>
+    <!-- BUTONLAR -->
+    <button id="adminToggle" onclick="openAdmin()"><i class="fas fa-cog"></i></button>
+    <button onclick="topFunction()" id="backToTop" title="Başa Dön">↑</button>
+    <button onclick="toggleMode()" id="modeToggle">🌓 Mod Değiştir</button>
 
-<script>
-    // Başlangıç Mangaları (Buraya eklediklerin HERKESE görünür)
-    let mangas = JSON.parse(localStorage.getItem('mangas')) || [
+    <div class="overlay" id="overlay" onclick="closeAdmin()"></div>
+    <div id="adminPanel">
+        <h3>Manga Ekle</h3>
+        <input type="password" id="adminPass" class="admin-input" placeholder="Şifre (1234)">
+        <input type="text" id="mName" class="admin-input" placeholder="Manga Adı">
+        <input type="text" id="mImg" class="admin-input" placeholder="Kapak Resmi URL">
+        <input type="text" id="mCap" class="admin-input" placeholder="Bölüm No (Örn: Bölüm 1)">
+        <input type="text" id="mUrl" class="admin-input" placeholder="Drive/Mega Linki">
+        <button class="btn-save" onclick="saveManga()">Kaydet</button>
+    </div>
+
+    <script>
+        let mangas = JSON.parse(localStorage.getItem('mangas')) || [
             {
                 name: "At the End of the Road",
                 img: "at-the-end-of-the-road/b1/1%20(2).jpg",
                 cap: "Bölümler",
                 url: "chapters.html?name=At-The-End-Of-The-Road"
             }
-    ];
+        ];
 
-    let isAdmin = false;
-
-    function renderMangas() {
-        const grid = document.getElementById('mangaGrid');
-        grid.innerHTML = '';
-        mangas.forEach((m, index) => {
-            grid.innerHTML += `
-                <div class="manga-card" onclick="window.open('${m.url}', '_blank')">
-                    <button class="delete-btn" onclick="event.stopPropagation(); deleteManga(${index})">×</button>
-                    <img src="${m.img}" class="manga-img" alt="${m.name}">
-                    <div class="manga-content">
-                        <div class="manga-title">${m.name}</div>
-                        <div class="chapter-btn">${m.cap}</div>
+        function renderMangas() {
+            const grid = document.getElementById('mangaGrid');
+            grid.innerHTML = '';
+            mangas.forEach((m, index) => {
+                grid.innerHTML += `
+                    <div class="manga-card" onclick="window.location.href='${m.url}'">
+                        <button class="delete-btn" onclick="event.stopPropagation(); deleteManga(${index})">×</button>
+                        <img src="${m.img}" class="manga-img" alt="${m.name}">
+                        <div class="manga-content">
+                            <div class="manga-title">${m.name}</div>
+                            <div class="chapter-btn">${m.cap}</div>
+                        </div>
                     </div>
-                </div>
-            `;
-        });
-    }
-
-    function openAdmin() {
-        document.getElementById('adminPanel').style.display = 'block';
-        document.getElementById('overlay').style.display = 'block';
-    }
-
-    function closeAdmin() {
-        document.getElementById('adminPanel').style.display = 'none';
-        document.getElementById('overlay').style.display = 'none';
-    }
-
-    function saveManga() {
-        const pass = document.getElementById('adminPass').value;
-        if(pass !== "1234") { alert("Şifre Yanlış!"); return; }
-        
-        const name = document.getElementById('mName').value;
-        const img = document.getElementById('mImg').value;
-        const cap = document.getElementById('mCap').value;
-        const url = document.getElementById('mUrl').value;
-
-        if(name && cap && url) {
-            mangas.unshift({ name, img: img || 'https://via.placeholder.com/200x280', cap, url });
-            localStorage.setItem('mangas', JSON.stringify(mangas));
-            renderMangas();
-            closeAdmin();
-        } else {
-            alert("Lütfen tüm alanları doldurun!");
+                `;
+            });
         }
-    }
 
-    function deleteManga(index) {
-        if(confirm("Silmek istediğine emin misin?")) {
-            mangas.splice(index, 1);
-            localStorage.setItem('mangas', JSON.stringify(mangas));
-            renderMangas();
+        function openAdmin() {
+            document.getElementById('adminPanel').style.display = 'block';
+            document.getElementById('overlay').style.display = 'block';
         }
-    }
 
-    renderMangas();
-</script>
-<script>
-let mybutton = document.getElementById("backToTop");
-window.onscroll = function() {scrollFunction()};
+        function closeAdmin() {
+            document.getElementById('adminPanel').style.display = 'none';
+            document.getElementById('overlay').style.display = 'none';
+        }
 
-function scrollFunction() {
-  if (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300) {
-    mybutton.style.display = "block";
-  } else {
-    mybutton.style.display = "none";
-  }
-}
+        function saveManga() {
+            const pass = document.getElementById('adminPass').value;
+            if(pass !== "1234") { alert("Şifre Yanlış!"); return; }
+            
+            const name = document.getElementById('mName').value;
+            const img = document.getElementById('mImg').value;
+            const cap = document.getElementById('mCap').value;
+            const url = document.getElementById('mUrl').value;
 
-function topFunction() {
-  window.scrollTo({top: 0, behavior: 'smooth'});
-}
-    function toggleMode() {
-  document.body.classList.toggle("light-mode");
-}
-</script>
-    <button onclick="topFunction()" id="backToTop" title="Başa Dön" style="display: none; position: fixed; bottom: 20px; right: 30px; z-index: 99; border: none; outline: none; background-color: #9d4edd; color: white; cursor: pointer; padding: 15px; border-radius: 50%; font-size: 18px; box-shadow: 0 4px 8px rgba(0,0,0,0.3); transition: 0.3s;">↑</button>
-    <button onclick="toggleMode()" id="modeToggle" style="position: fixed; top: 20px; left: 20px; z-index: 1001; background: #333; color: white; border: none; padding: 10px; border-radius: 5px; cursor: pointer;">🌓 Mod Değiştir</button>
+            if(name && cap && url) {
+                mangas.unshift({ name, img: img || 'https://via.placeholder.com/200x280', cap, url });
+                localStorage.setItem('mangas', JSON.stringify(mangas));
+                renderMangas();
+                closeAdmin();
+            } else {
+                alert("Lütfen tüm alanları doldurun!");
+            }
+        }
+
+        function deleteManga(index) {
+            if(confirm("Silmek istediğine emin misin?")) {
+                mangas.splice(index, 1);
+                localStorage.setItem('mangas', JSON.stringify(mangas));
+                renderMangas();
+            }
+        }
+
+        // --- DİĞER FONKSİYONLAR ---
+        let mybutton = document.getElementById("backToTop");
+        window.onscroll = function() {
+            if (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300) {
+                mybutton.style.display = "block";
+            } else {
+                mybutton.style.display = "none";
+            }
+        };
+
+        function topFunction() {
+            window.scrollTo({top: 0, behavior: 'smooth'});
+        }
+
+        function toggleMode() {
+            document.body.classList.toggle("light-mode");
+        }
+
+        renderMangas();
+    </script>
 </body>
 </html>
-
-
