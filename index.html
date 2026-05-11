@@ -255,42 +255,69 @@
 
         renderMangas();
     </script>
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+  import { getAuth, onAuthStateChanged, signOut, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+  // Veritabanı için gerekli olanları ekledik
+  import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-        import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+  const firebaseConfig = {
+    apiKey: "AIzaSyDtgtRY92mRDLS9zlPEhxt1QADBRuGcnas",
+    authDomain: "midnight-manga.firebaseapp.com",
+    projectId: "midnight-manga",
+    storageBucket: "midnight-manga.firebasestorage.app",
+    messagingSenderId: "891264496660",
+    appId: "1:891264496660:web:c4d635d05386d352262301"
+  };
 
-        const firebaseConfig = {
-            apiKey: "AIzaSyDtgtRY92mRDLS9zlPEhxt1QADBRuGcnas",
-            authDomain: "midnight-manga.firebaseapp.com",
-            projectId: "midnight-manga",
-            storageBucket: "midnight-manga.firebasestorage.app",
-            messagingSenderId: "891264496660",
-            appId: "1:891264496660:web:c4d635d05386d352262301"
-        };
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const db = getFirestore(app); // Veritabanını başlattık
+  const provider = new GoogleAuthProvider();
 
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-        const provider = new GoogleAuthProvider();
+  // --- KULLANICI ADI KONTROLÜ VE KAYIT ---
+  async function checkUserProfile(user) {
+    const userRef = doc(db, "users", user.uid);
+    const userSnap = await getDoc(userRef);
 
-        window.login = () => {
-            signInWithPopup(auth, provider)
-            .then((result) => { console.log("Giriş başarılı"); })
-            .catch((error) => { alert("Hata: " + error.message); });
-        };
+    if (!userSnap.exists()) {
+      // Eğer veritabanında bu kullanıcı yoksa, özel isim soralım
+      let customUsername = prompt("Midnight dünyasına hoş geldin! Lütfen bir kullanıcı adı belirle:", user.displayName);
+      
+      if(!customUsername) customUsername = "AnonimOkur";
 
-        window.logout = () => { signOut(auth); };
+      // Veritabanına kaydet
+      await setDoc(userRef, {
+        username: customUsername,
+        email: user.email,
+        favorites: [],
+        history: []
+      });
+      location.reload(); // Sayfayı yenileyip yeni ismi gösterelim
+    } else {
+      // Zaten kayıtlıysa, veritabanındaki ismini butona yazalım
+      document.getElementById('userAuthBtn').innerHTML = `<i class="fas fa-user"></i> ${userSnap.data().username} (Çıkış)`;
+    }
+  }
 
-        onAuthStateChanged(auth, (user) => {
-            const userBtn = document.getElementById('userAuthBtn');
-            if (user) {
-                userBtn.innerHTML = `<i class="fas fa-user"></i> ${user.displayName.split(' ')[0]} (Çıkış)`;
-                userBtn.onclick = window.logout;
-            } else {
-                userBtn.innerHTML = `<i class="fas fa-sign-in-alt"></i> Giriş Yap`;
-                userBtn.onclick = window.login;
-            }
-        });
+  window.login = () => {
+    signInWithPopup(auth, provider).then((result) => {
+      checkUserProfile(result.user);
+    });
+  };
+
+  window.logout = () => { signOut(auth); };
+
+  onAuthStateChanged(auth, (user) => {
+    const userBtn = document.getElementById('userAuthBtn');
+    if (user) {
+      checkUserProfile(user); // Kullanıcı varsa ismini veritabanından çek
+    } else {
+      userBtn.innerHTML = `<i class="fas fa-sign-in-alt"></i> Giriş Yap`;
+      userBtn.onclick = window.login;
+    }
+  });
+</script>
     </script>
 </body>
 </html>
