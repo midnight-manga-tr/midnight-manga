@@ -147,20 +147,20 @@
                 url: "chapters.html?name=At-The-End-Of-The-Road"
             }
         ];
-        function renderMangas() {
+    function renderMangas() {
     const grid = document.getElementById('mangaGrid');
+    if(!grid) return; 
     grid.innerHTML = '';
     mangas.forEach((m, index) => {
         grid.innerHTML += `
             <div class="manga-card" onclick="window.location.href='${m.url}'">
                 <button class="delete-btn" onclick="event.stopPropagation(); deleteManga(${index})">×</button>
-                
                 <img src="${m.img}" 
                      class="manga-img" 
                      alt="${m.name}" 
                      style="object-fit: cover; object-position: top; width: 100%; height: 280px;" 
+                     onerror="this.src='https://via.placeholder.com/280x400?text=Resim+Yuklenemedi'"
                      loading="lazy">
-                
                 <div class="manga-content">
                     <div class="manga-title">${m.name}</div>
                     <div class="chapter-btn">${m.cap}</div>
