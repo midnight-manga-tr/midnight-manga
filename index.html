@@ -6,159 +6,100 @@
     <title>Midnight-Manga | Karanlığın Sesi</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        :root {
-            --primary: #9d4edd; 
-            --bg: #0a0a0c;
-            --card: #161b22;
-            --text: #e6edf3;
-            --accent: #c9d1d9;
-        }
+    :root {
+        --primary: #9d4edd; 
+        --bg: #0a0a0c;
+        --card: #161b22;
+        --text: #e6edf3;
+        --accent: #c9d1d9;
+        --nav-bg: rgba(10, 10, 12, 0.95);
+    }
 
-        body {
-            background-color: var(--bg);
-            color: var(--text);
-            font-family: 'Inter', sans-serif;
-            margin: 0;
-        }
+    /* --- AYDINLIK MOD (GÖZ DOSTU & OKUNABİLİR) --- */
+    body.light-mode {
+        --bg: #f5f5f7; /* Saf beyaz değil, dinlendirici gri-beyaz */
+        --card: #ffffff;
+        --text: #1d1d1f; /* Yazılar artık simsiyah/koyu gri, yani görünür! */
+        --accent: #424245;
+        --nav-bg: rgba(245, 245, 247, 0.95);
+    }
 
-        .site-logo {
-            text-align: center;
-            padding: 30px 0 10px 0;
-            width: 100%;
-        }
-        .site-logo a {
-            font-size: 42px;
-            font-weight: 900;
-            color: var(--primary);
-            text-decoration: none;
-            letter-spacing: 3px;
-            text-transform: uppercase;
-            transition: 0.3s;
-            display: inline-block;
-        }
-        .site-logo a:hover {
-            transform: scale(1.05);
-            text-shadow: 0 0 20px rgba(157, 78, 221, 0.5);
-        }
+    body {
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: 'Inter', sans-serif;
+        margin: 0;
+        transition: background-color 0.3s, color 0.3s;
+    }
 
-        nav {
-            background: rgba(10, 10, 12, 0.95);
-            padding: 1rem 5%;
-            display: flex;
-            justify-content: center; 
-            align-items: center;
-            border-bottom: 1px solid #30363d;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
+    /* --- LOGO VE NAVİGASYON --- */
+    .site-logo { text-align: center; padding: 30px 0 10px 0; width: 100%; }
+    .site-logo a {
+        font-size: 42px; font-weight: 900; color: var(--primary);
+        text-decoration: none; letter-spacing: 3px; text-transform: uppercase;
+        transition: 0.3s; display: inline-block;
+    }
+    .site-logo a:hover { transform: scale(1.05); text-shadow: 0 0 20px rgba(157, 78, 221, 0.5); }
 
-        /* --- GİRİŞ BUTONU STİLİ --- */
-        #userAuthBtn {
-            position: absolute;
-            right: 5%;
-            background: var(--primary);
-            color: white;
-            border: none;
-            padding: 8px 15px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-weight: bold;
-            transition: 0.3s;
-        }
-        #userAuthBtn:hover { opacity: 0.8; }
+    nav {
+        background: var(--nav-bg);
+        padding: 1rem 5%;
+        display: flex; justify-content: center; align-items: center;
+        border-bottom: 1px solid rgba(48, 54, 61, 0.2);
+        position: sticky; top: 0; z-index: 100;
+    }
 
-        .hero {
-            padding: 4rem 5%;
-            text-align: center;
-            background: linear-gradient(to bottom, #161b22, var(--bg));
-        }
+    #userAuthBtn {
+        position: absolute; right: 5%; background: var(--primary);
+        color: white; border: none; padding: 8px 15px; border-radius: 5px;
+        cursor: pointer; font-weight: bold; transition: 0.3s;
+    }
 
-        .container { padding: 2rem 5%; max-width: 1300px; margin: 0 auto; }
-        
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            gap: 25px;
-        }
+    /* --- MANGA KARTLARI (MOBİL FIX) --- */
+    .hero { padding: 4rem 5%; text-align: center; background: linear-gradient(to bottom, #161b22, var(--bg)); }
+    .container { padding: 2rem 5%; max-width: 1300px; margin: 0 auto; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 25px; }
 
-        .manga-card {
-            background: var(--card);
-            border-radius: 12px;
-            overflow: hidden;
-            border: 1px solid #30363d;
-            transition: 0.3s;
-            position: relative;
-            cursor: pointer;
-        }
+    .manga-card {
+        background: var(--card); border-radius: 12px; overflow: hidden;
+        border: 1px solid rgba(48, 54, 61, 0.5); transition: 0.3s;
+        position: relative; cursor: pointer; display: flex; flex-direction: column;
+    }
+    .manga-card:hover { transform: translateY(-5px); border-color: var(--primary); }
 
-        .manga-card:hover { transform: translateY(-5px); border-color: var(--primary); }
-        .manga-img { width: 100%; height: 280px; object-fit: cover; }
-        .manga-content { padding: 15px; }
-        .manga-title { font-weight: bold; margin-bottom: 10px; font-size: 1rem; }
+    .manga-img {
+        width: 100%; height: 280px; object-fit: cover; /* Resmi kutuya sığdırır */
+        object-position: top; display: block;
+    }
 
-        .chapter-btn {
-            background: #21262d;
-            color: var(--accent);
-            padding: 6px 12px;
-            border-radius: 6px;
-            text-decoration: none;
-            font-size: 0.8rem;
-            display: inline-block;
-        }
+    .manga-content { padding: 15px; background: var(--card); }
+    .manga-title { font-weight: bold; margin-bottom: 10px; font-size: 1rem; color: var(--text); }
 
-        #backToTop { 
-            display: none; position: fixed; bottom: 20px; right: 20px; 
-            z-index: 999; border: none; background-color: var(--primary); 
-            color: white; cursor: pointer; padding: 15px; border-radius: 50%; 
-            font-size: 18px; box-shadow: 0 4px 8px rgba(0,0,0,0.3); transition: 0.3s; 
-        }
+    .chapter-btn {
+        background: var(--primary); color: white; padding: 6px 12px;
+        border-radius: 6px; text-decoration: none; font-size: 0.8rem; display: inline-block;
+    }
 
-        #modeToggle { 
-            position: fixed; top: 20px; left: 20px; z-index: 1001; 
-            background: #333; color: white; border: 1px solid var(--primary); 
-            padding: 10px; border-radius: 8px; cursor: pointer; transition: 0.3s;
-        }
+    /* --- DİĞER ARAÇLAR --- */
+    #backToTop { 
+        display: none; position: fixed; bottom: 20px; right: 20px; z-index: 999;
+        border: none; background-color: var(--primary); color: white;
+        padding: 15px; border-radius: 50%; cursor: pointer;
+    }
 
-        #adminToggle {
-            position: fixed; bottom: 20px; left: 20px;
-            background: #21262d; color: white; border: none;
-            padding: 12px; border-radius: 50%; cursor: pointer; z-index: 1000;
-        }
+    #modeToggle { 
+        position: fixed; top: 20px; left: 20px; z-index: 1001; 
+        background: var(--card); color: var(--text); border: 1px solid var(--primary); 
+        padding: 10px; border-radius: 8px; cursor: pointer;
+    }
 
-        #adminPanel {
-            display: none; position: fixed; top: 50%; left: 50%;
-            transform: translate(-50%, -50%); background: var(--card);
-            padding: 2rem; border-radius: 15px; border: 2px solid var(--primary);
-            z-index: 1001; width: 90%; max-width: 400px;
-        }
-
-        .admin-input {
-            width: 100%; padding: 10px; margin: 10px 0;
-            background: #0d1117; border: 1px solid #30363d;
-            color: white; border-radius: 5px; box-sizing: border-box;
-        }
-
-        .btn-save {
-            background: var(--primary); color: white; width: 100%;
-            padding: 10px; border: none; border-radius: 5px; cursor: pointer;
-        }
-
-        .overlay {
-            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.8); z-index: 1000;
-        }
-
-        .delete-btn {
-            position: absolute; top: 10px; right: 10px;
-            background: rgba(255,0,0,0.8); color: white;
-            border: none; border-radius: 50%; width: 25px; height: 25px;
-            cursor: pointer; z-index: 10;
-        }
-
-        body.light-mode { background-color: #f0f2f5 !important; color: #1a1a1a !important; }
-        body.light-mode .manga-card { background: #ffffff !important; }
-        body.light-mode nav { background: #fff; border-bottom: 1px solid #ddd; }
+    #adminToggle { position: fixed; bottom: 20px; left: 20px; background: #21262d; color: white; border: none; padding: 12px; border-radius: 50%; cursor: pointer; z-index: 1000; }
+    #adminPanel { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: var(--card); padding: 2rem; border-radius: 15px; border: 2px solid var(--primary); z-index: 1001; width: 90%; max-width: 400px; color: var(--text); }
+    .admin-input { width: 100%; padding: 10px; margin: 10px 0; background: var(--bg); border: 1px solid #30363d; color: var(--text); border-radius: 5px; box-sizing: border-box; }
+    .btn-save { background: var(--primary); color: white; width: 100%; padding: 10px; border: none; border-radius: 5px; cursor: pointer; }
+    .overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 1000; }
+    .delete-btn { position: absolute; top: 10px; right: 10px; background: rgba(255,0,0,0.8); color: white; border: none; border-radius: 50%; width: 25px; height: 25px; cursor: pointer; z-index: 10; }
+</style>
     </style>
 </head>
 <body>
