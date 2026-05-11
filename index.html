@@ -147,23 +147,28 @@
                 url: "chapters.html?name=At-The-End-Of-The-Road"
             }
         ];
-
         function renderMangas() {
-            const grid = document.getElementById('mangaGrid');
-            grid.innerHTML = '';
-            mangas.forEach((m, index) => {
-                grid.innerHTML += `
-                    <div class="manga-card" onclick="window.location.href='${m.url}'">
-                        <button class="delete-btn" onclick="event.stopPropagation(); deleteManga(${index})">×</button>
-                        <img src="${m.img}" class="manga-img" alt="${m.name}">
-                        <div class="manga-content">
-                            <div class="manga-title">${m.name}</div>
-                            <div class="chapter-btn">${m.cap}</div>
-                        </div>
-                    </div>
-                `;
-            });
-        }
+    const grid = document.getElementById('mangaGrid');
+    grid.innerHTML = '';
+    mangas.forEach((m, index) => {
+        grid.innerHTML += `
+            <div class="manga-card" onclick="window.location.href='${m.url}'">
+                <button class="delete-btn" onclick="event.stopPropagation(); deleteManga(${index})">×</button>
+                
+                <img src="${m.img}" 
+                     class="manga-img" 
+                     alt="${m.name}" 
+                     style="object-fit: cover; object-position: top; width: 100%; height: 280px;" 
+                     loading="lazy">
+                
+                <div class="manga-content">
+                    <div class="manga-title">${m.name}</div>
+                    <div class="chapter-btn">${m.cap}</div>
+                </div>
+            </div>
+        `;
+    });
+}
 
         function openAdmin() { document.getElementById('adminPanel').style.display = 'block'; document.getElementById('overlay').style.display = 'block'; }
         function closeAdmin() { document.getElementById('adminPanel').style.display = 'none'; document.getElementById('overlay').style.display = 'none'; }
